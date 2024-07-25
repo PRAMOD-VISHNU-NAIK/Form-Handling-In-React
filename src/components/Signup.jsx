@@ -1,5 +1,8 @@
+import { useState } from "react";
+
 export default function Signup() {
 
+  const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState(false);
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -16,7 +19,15 @@ export default function Signup() {
     data.acquisition = aqusitionChannel;        // Append the acquisition to the data object.
     
     console.log(data);
+
+    if(data.password !== data['confirm-password']){       // Here we have data['confirm-password'] because confirm-password has - (Hyphen) otherwise we would have used . operator.
+      setPasswordsAreNotEqual(true);
+      return;
+    }
+
+    // event.target.reset();
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>Welcome on board!</h2>
@@ -40,6 +51,9 @@ export default function Signup() {
             type="password"
             name="confirm-password"
           />
+          <div className="control-error">
+            {passwordsAreNotEqual && <p>Passwords must Match!!</p>}
+          </div>
         </div>
       </div>
 
@@ -104,7 +118,7 @@ export default function Signup() {
       </div>
 
       <p className="form-actions">
-        <button type="reset" className="button button-flat">
+        <button type="reset" className="button button-flat">      {/* Here type= "reset" is Important which will automatically reset the entire form to it's initial state or use "event.target.reset()" inside the formHandler function */}
           Reset
         </button>
         <button type="submit" className="button">
